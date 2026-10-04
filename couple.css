@@ -1,0 +1,71 @@
+/* ==========================================================================
+   COUPLE ANIMATION (just below the kolam) — used by couple.js
+   Timeline after the doors open (the hero gets .is-active):
+     0.3s  golden light rises behind them
+     0.8s  he and she walk in from both sides
+     4.0s  they meet — a small golden sparkle at the rose
+     ~5s   your names appear in the kolam, then the wordings come over the couple
+   ========================================================================== */
+.hero-couple {
+  position: absolute;
+  top: calc(100% + 2px);            /* just below the kolam */
+  left: 0; right: 0;
+  width: min(48vw, 29vh, 230px);
+  margin: 0 auto;
+  pointer-events: none;
+  transition: opacity 2s ease 1s, filter 2s ease 1s;
+}
+@supports (height: 1svh) { .hero-couple { width: min(48vw, 29svh, 230px); } }
+.hero-couple::before { content: ""; display: block; padding-top: 128.89%; }   /* 675 x 870 artwork */
+
+.hero-couple__glow {
+  position: absolute; left: -60%; right: -60%; top: -10%; bottom: -6%;
+  background: radial-gradient(closest-side, rgba(255, 217, 138, .55), rgba(242, 162, 60, .26) 48%, rgba(196, 87, 26, 0) 100%);
+  opacity: 0;
+  transform: scale(.55);
+}
+.hero-couple__fig { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; }
+.hero-couple__img {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  filter: drop-shadow(0 0 5px rgba(255, 205, 120, .45));      /* warm rim light */
+}
+.hero-couple__spark {
+  position: absolute; width: 24%; left: 40.89%; top: calc(48.85% - 12%);
+  overflow: visible; opacity: 0; transform: scale(0);
+}
+
+/* ---------- entrance (runs when the doors have opened) ---------- */
+.hero.is-active .hero-couple__glow { animation: cp-glow-in 2.4s ease-out .3s forwards, cp-glow-pulse 5s ease-in-out 2.8s infinite alternate; }
+.hero.is-active .hero-couple__fig--groom { animation: cp-walk-l 3.2s cubic-bezier(.2, .7, .25, 1) .8s forwards; }
+.hero.is-active .hero-couple__fig--bride { animation: cp-walk-r 3.2s cubic-bezier(.2, .7, .25, 1) .8s forwards; }
+.hero.is-active .hero-couple__spark { animation: cp-spark 1.5s ease-out 3.8s forwards, cp-twinkle 2.6s ease-in-out 5.3s infinite alternate; }
+@keyframes cp-glow-in { to { opacity: 1; transform: scale(1); } }
+@keyframes cp-glow-pulse { from { opacity: 1; } to { opacity: .74; } }
+@keyframes cp-walk-l { from { opacity: 0; transform: translate(-18%, 0); } 40% { opacity: 1; } to { opacity: 1; transform: none; } }
+@keyframes cp-walk-r { from { opacity: 0; transform: translate(18%, 0); } 40% { opacity: 1; } to { opacity: 1; transform: none; } }
+@keyframes cp-spark { 0% { opacity: 0; transform: scale(0) rotate(0deg); } 45% { opacity: 1; transform: scale(1.5) rotate(45deg); } 100% { opacity: .9; transform: scale(.8) rotate(90deg); } }
+@keyframes cp-twinkle { from { opacity: .9; transform: scale(.8) rotate(90deg); } to { opacity: .45; transform: scale(.6) rotate(135deg); } }
+
+/* ---------- gentle life once they have met: a soft breathing sway ---------- */
+.hero.is-active .hero-couple__fig--groom .hero-couple__img { transform-origin: 30% 100%; animation: cp-breathe 4.8s ease-in-out 4s infinite alternate; }
+.hero.is-active .hero-couple__fig--bride .hero-couple__img { transform-origin: 70% 100%; animation: cp-breathe 5.4s ease-in-out 4.6s infinite alternate-reverse; }
+@keyframes cp-breathe { from { transform: rotate(-.35deg) scale(1); } to { transform: rotate(.35deg) scale(1.012); } }
+
+/* when your wordings appear (after the couple has met) they come over the couple,
+   and the couple softens into the background so the text stays easy to read */
+.hero.names-in .hero-couple { opacity: .5; filter: blur(.8px); }
+.hero__meta { text-shadow: 0 1px 10px rgba(26, 4, 8, .9), 0 0 2px rgba(26, 4, 8, .6); }
+
+/* wide screens: a slightly smaller kolam so the kolam and the couple both fit on the first screen */
+@media (min-aspect-ratio: 1/1) {
+  .hero .hero__kolam { width: min(92vw, 46vh, 560px); }
+  @supports (height: 1svh) { .hero .hero__kolam { width: min(92vw, 46svh, 560px); } }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-couple__glow, .hero-couple__fig, .hero-couple__spark { animation: none !important; opacity: 1; transform: none; }
+  .hero-couple__spark { opacity: .8; transform: scale(.8); }
+  .hero-couple__img { animation: none !important; }
+  .hero-couple { transition: none; }
+  .hero.names-in .hero-couple { filter: none; }
+}
