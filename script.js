@@ -22,7 +22,7 @@ const CONFIG = {
   },
   bride: {
     name: 'Sathyavani',
-    nameTa: 'சத்யவாணி',          // Tamil spelling — please confirm with family
+    nameTa: 'சத்தியவாணி',',          // Tamil spelling — please confirm with family
     parents: '',
     parentsTa: '',
   },
