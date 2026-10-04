@@ -8,6 +8,7 @@
    To use other pictures, replace those two image files (same names, same size).
    The timing is in couple.css. To switch the couple off, delete the
    <script src="couple.js"> line in index.html.
+   (This file also moves the page to the invitation automatically — see below.)
    ========================================================================== */
 (function () {
   'use strict';
@@ -35,4 +36,52 @@
     img.addEventListener('error', function () { if (couple.parentNode) couple.parentNode.removeChild(couple); });
   });
   refresh();
+})();
+
+/* ==========================================================================
+   ✦ AUTO NEXT PAGE ✦
+   When the opening has finished (names and wordings shown), the page glides
+   down to the invitation by itself, so guests know there is more below.
+   It happens once, and never if the guest has already touched or scrolled.
+   ========================================================================== */
+(function () {
+  'use strict';
+  var hero = document.getElementById('hero');
+  var next = document.getElementById('invitation');
+  if (!hero || !next) return;
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var WAIT = 6500;           // ms after your names appear (wordings are fully shown at ~2s)
+  var armed = false, cancelled = false, gliding = false;
+  var atTop = function () { return (window.pageYOffset || document.documentElement.scrollTop) < 60; };
+
+  function glide() {
+    if (cancelled || !atTop() || document.documentElement.classList.contains('is-locked')) return;
+    var secret = document.getElementById('secret');
+    if (secret && !secret.hidden) return;                     // the hidden-lamp message is open
+    var start = window.pageYOffset, end = next.getBoundingClientRect().top + start, t0 = null, dur = 1600;
+    gliding = true;
+    function step(t) {
+      if (!gliding) return;
+      if (t0 === null) t0 = t;
+      var k = Math.min(1, (t - t0) / dur);
+      var e = k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;   // ease in-out
+      window.scrollTo(0, start + (end - start) * e);
+      if (k < 1) requestAnimationFrame(step); else gliding = false;
+    }
+    requestAnimationFrame(step);
+  }
+  // the guest is in control: any touch / wheel / key after the opening cancels the automatic move
+  // (the tap that opens the doors doesn't count)
+  ['touchstart', 'wheel', 'keydown', 'mousedown'].forEach(function (type) {
+    window.addEventListener(type, function () { if (armed) { cancelled = true; gliding = false; } }, { passive: true });
+  });
+
+  function arm() { armed = true; setTimeout(glide, WAIT); }
+  if (hero.classList.contains('names-in')) arm();
+  else if ('MutationObserver' in window) {
+    var mo = new MutationObserver(function () {
+      if (hero.classList.contains('names-in')) { mo.disconnect(); arm(); }
+    });
+    mo.observe(hero, { attributes: true, attributeFilter: ['class'] });
+  }
 })();
