@@ -85,7 +85,7 @@ const CONFIG = {
   blessings: {
     // Your WhatsApp number with country code, digits only — e.g. '919876543210'.
     // Leave '' and WhatsApp will let the guest choose who to send it to.
-    whatsappNumber: '',
+    whatsappNumber: '917010912552',
     message:
       '🌸 இனிய திருமண நல்வாழ்த்துகள்! 🌸\n\n' +
       'Dear {groom} & {bride},\n' +
@@ -114,7 +114,7 @@ const CONFIG = {
   },
 
   // Your published address (used inside the calendar entries)
-  siteUrl: 'https://adiseelan.github.io/wedding/',
+  siteUrl: 'https://adiseelan.github.io/sathyavani-adiseelan/',
 };
 
 /* ==========================================================================

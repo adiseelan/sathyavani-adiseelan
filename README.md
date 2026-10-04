@@ -8,10 +8,12 @@ wedding/
 ├── index.html          ← page structure + WhatsApp preview tags
 ├── style.css           ← all the styling and animations
 ├── script.js           ← CONFIG (your details) at the very top + all behaviour
+├── couple.js / couple.css ← the couple below the kolam + the automatic page-by-page tour + screen stays on
 ├── README.md
 └── assets/
-    ├── music.mp3            original veena + tanpura piece (Raga Mohanam), 1.2 MB, loops
+    ├── music.mp3            background song (Madhavam), 1.3 MB, loops
     ├── og-image.jpg         1200×630 WhatsApp / social preview card
+    ├── couple-groom.webp, couple-bride.webp   the couple (used by couple.js)
     ├── favicon.svg
     ├── apple-touch-icon.png
     ├── thoranam.svg         mango-leaf thoranam on the temple door
@@ -19,9 +21,9 @@ wedding/
     └── zari.svg             Kanchipuram-style temple border
 ```
 
-The full page loads about **1.7 MB** (music 1.2 MB, fonts about 250 KB, GSAP about 115 KB, and the
-site's own code about 170 KB). All the art (doors, kolams, lamps, garlands) is vector, so the page itself has
-no photos.
+The full page loads about **2 MB** (music 1.3 MB, fonts about 250 KB, GSAP about 115 KB, the site's own
+code about 190 KB, and the two couple pictures about 65 KB as WebP). All the other art (doors, kolams, lamps,
+garlands) is vector.
 
 ---
 
@@ -33,7 +35,7 @@ Open `script.js`. Everything a guest reads is in the `CONFIG` object at the top.
 |---|---|---|
 | **Your WhatsApp number** | `blessings.whatsappNumber` | With country code, digits only, e.g. `'919876543210'`. If you leave it empty, WhatsApp asks the guest to choose a contact. |
 | **Temple map pin** | `wedding.mapsUrl` | Right now this link searches Google Maps for "Vallathamman Kovil, Anumanthai". Open the temple in Google Maps, tap **Share → Copy link**, and paste that link here so the pin is exact. |
-| Tamil spelling of names | `groom.nameTa`, `bride.nameTa` | Set to ஆதிசீலன் / சத்யவாணி. Please check them with your family. |
+| Tamil spelling of names | `groom.nameTa`, `bride.nameTa` | Set to ஆதிசீலன் / சத்தியவாணி. Please check them with your family. |
 | Parents' names (optional) | `groom.parents`, `bride.parents` (+ `…Ta`) | Empty values stay hidden. |
 | Tamil calendar date (optional) | `tamilDate` | e.g. the Tamil month/day line from your patrikai. |
 | Story text, secret message, WhatsApp message | `story`, `secret`, `blessings.message` | You can write `{groom}`, `{bride}` or `{date}` in any of these and the page fills it in. |
@@ -58,7 +60,7 @@ In Chrome, press ⌥⌘I and turn on the phone toolbar to see it at phone size (
 ## 2. Publish on GitHub Pages
 
 The steps below assume your **`adiseelan`** account and a repository named **`wedding`**, which gives
-**https://adiseelan.github.io/wedding/**.
+**https://adiseelan.github.io/sathyavani-adiseelan/**.
 If you use a different account or repository name, see step 4.
 
 ### Option A: in the browser (no terminal)
@@ -87,7 +89,7 @@ git push -u origin main
 1. In the repository, open **Settings → Pages**.
 2. Under **Build and deployment**, set **Source** to **Deploy from a branch**.
 3. Set **Branch** to `main` and the folder to `/ (root)`, then click **Save**.
-4. Wait 1–2 minutes and refresh. The live address appears at the top: `https://adiseelan.github.io/wedding/`
+4. Wait 1–2 minutes and refresh. The live address appears at the top: `https://adiseelan.github.io/sathyavani-adiseelan/`
 
 ### Updating later
 - Browser: open a file on GitHub, click the ✏️ pencil, edit, then **Commit changes**.
@@ -102,13 +104,13 @@ Each change goes live in about a minute.
 WhatsApp builds the preview from the `og:` tags in `index.html` and does not run JavaScript, so those tags
 are written directly in the HTML.
 
-- **If your address is not `https://adiseelan.github.io/wedding/`**, update the `og:url` and `og:image`
+- **If your address is not `https://adiseelan.github.io/sathyavani-adiseelan/`**, update the `og:url` and `og:image`
   lines in `index.html` and `siteUrl` in `script.js`. WhatsApp needs the full https address of the image.
 - To test, send the link to yourself on WhatsApp. If an old preview without the image appears, WhatsApp
-  has cached it. Send the link with `?v=2` on the end (for example `https://adiseelan.github.io/wedding/?v=2`)
+  has cached it. Send the link with `?v=2` on the end (for example `https://adiseelan.github.io/sathyavani-adiseelan/?v=2`)
   to force a fresh preview.
 - The preview image is a **JPEG on purpose**. WhatsApp and Facebook don't reliably show WebP preview images.
-  The page itself has no raster images, so there was nothing to convert to WebP.
+  The couple pictures on the page itself are WebP.
 
 ---
 
@@ -131,6 +133,33 @@ inside `script.js` to `0`, `2` or `3` to put it on another card.
 
 ---
 
+## 4b. The couple, the automatic tour and the screen
+
+Everything here lives in `couple.js` + `couple.css`.
+
+**The couple.** After the doors open, the bride and groom (`assets/couple-groom.webp`, `assets/couple-bride.webp`)
+walk in from both sides just below the kolam and meet. He offers her a rose, with a small golden sparkle.
+Then your wordings appear over them, and the couple stays fully clear. On laptop-size screens the couple stands
+beside the kolam, so the text never covers them.
+- To let the couple fade behind the wordings, change `opacity: 1` in the `.hero.names-in .hero-couple` line of
+  `couple.css` to something like `.5`.
+- To use other pictures, replace the two `.webp` files and keep the same names and size.
+
+**The automatic tour.** About 6 seconds after your names appear, the whole invitation moves by itself, one
+screen at a time, all the way to the end. Each part stays on screen long enough to read, and the event cards
+turn over on their own to show the time and venue.
+- If a guest touches or scrolls, the tour waits for them. After 8 quiet seconds it carries on from wherever
+  they are.
+- If a guest's phone is set to *reduce motion*, nothing moves by itself and the small scroll hint shows instead.
+- All the timings are in `TOUR` at the top of the second part of `couple.js` (1000 = 1 second).
+  `move: false` switches the tour off.
+
+**The screen stays on.** While the invitation is playing, the phone screen doesn't switch off after its
+usual 10–15 seconds. This uses the browser's Screen Wake Lock, which works in Chrome and Samsung Internet on
+Android and in Safari on iPhone (iOS 16.4 or later). A phone in battery-saver mode may still refuse, and older
+phones simply behave as normal. About 90 seconds after the tour ends (or after the guest's last touch), the phone
+goes back to its normal timeout. `keepScreenOn: false` in `TOUR` switches this off.
+
 ## 5. What's built in
 
 1. **Temple gate.** Carved wooden doors with brass studs, a mango-leaf thoranam, kuthuvilakku lamps and a
@@ -151,6 +180,8 @@ inside `script.js` to `0`, `2` or `3` to put it on another card.
 8. **Blessings.** A WhatsApp button with a pre-filled Tamil + English message.
 9. **Footer.** **Add to Calendar** offers a phone calendar file (.ics with both events and reminders 1 day
    and 2 hours before) or Google Calendar links. A floating music on/off button sits in the corner.
+10. **Automatic tour.** The page moves by itself from start to end, and the phone screen stays on while it
+    does (see 4b).
 
 **Reliability**
 - Mobile-first and tested at 320, 360 and 412 px wide with no sideways scrolling.
