@@ -1,10 +1,10 @@
 /* ==========================================================================
    ✦ COUPLE ANIMATION — just below the kolam ✦
-   After the temple doors open, the couple (assets/couple-groom.webp and
-   assets/couple-bride.webp) walk in from both sides just below the kolam and
-   meet — he offers her a rose, with a small golden sparkle. Then your wordings
-   appear over them, and the couple stays fully clear. (On laptop-size screens
-   the couple stands beside the kolam, so the text never covers them.)
+   After the temple doors open, the couple (a painting, seen from behind:
+   assets/couple-bride.webp and assets/couple-groom.webp) come in from both
+   sides just below the kolam: she from the left, he from the right. They meet,
+   she rests her head on his shoulder, and a small golden sparkle appears.
+   Then your wordings appear over them, and the couple stays fully clear.
 
    To use other pictures, replace those two image files (same names, same size).
    The timing is in couple.css. To switch the couple off, delete the

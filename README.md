@@ -22,7 +22,7 @@ wedding/
 ```
 
 The full page loads about **2 MB** (music 1.3 MB, fonts about 250 KB, GSAP about 115 KB, the site's own
-code about 190 KB, and the two couple pictures about 65 KB as WebP). All the other art (doors, kolams, lamps,
+code about 190 KB, and the two couple pictures about 100 KB as WebP). All the other art (doors, kolams, lamps,
 garlands) is vector.
 
 ---
@@ -137,13 +137,14 @@ inside `script.js` to `0`, `2` or `3` to put it on another card.
 
 Everything here lives in `couple.js` + `couple.css`.
 
-**The couple.** After the doors open, the bride and groom (`assets/couple-groom.webp`, `assets/couple-bride.webp`)
-walk in from both sides just below the kolam and meet. He offers her a rose, with a small golden sparkle.
-Then your wordings appear over them, and the couple stays fully clear. On laptop-size screens the couple stands
-beside the kolam, so the text never covers them.
+**The couple.** After the doors open, the painted couple (seen from behind) comes in just below the kolam:
+she from the left (`assets/couple-bride.webp`) and he from the right (`assets/couple-groom.webp`). They meet, she
+rests her head on his shoulder, and a small golden sparkle appears. Then your wordings appear over them, and the
+couple stays fully clear. On laptops the kolam is a little smaller, so everything fits on the first screen.
 - To let the couple fade behind the wordings, change `opacity: 1` in the `.hero.names-in .hero-couple` line of
   `couple.css` to something like `.5`.
-- To use other pictures, replace the two `.webp` files and keep the same names and size.
+- To use other pictures, replace the two `.webp` files and keep the same names and size (the two halves must line up
+  exactly when put together).
 
 **The automatic tour.** About 6 seconds after your names appear, the whole invitation moves by itself, one
 screen at a time, all the way to the end. Each part stays on screen long enough to read, and the event cards
